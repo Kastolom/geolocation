@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             showLocation(location);
+            SendData(location.getLatitude(), location.getLongitude(), location);
         }
 
         @Override
@@ -101,16 +102,18 @@ public class MainActivity extends AppCompatActivity {
         } else if (location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) {
             tvLocationNet.setText(formatLocation(location));
         }
-        SendData(location.getLatitude(), location.getLongitude(), new Date(location.getTime()));
     }
 
     private String formatLocation(Location location) {
         if (location == null)
             return "";
-        return String.format("Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT", location.getLatitude(), location.getLongitude(), new Date(location.getTime()));
+        String time = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
+        String coordinate = String.format("Coordinates: lat = %1$.8f, lon = %2$.8f", location.getLatitude(), location.getLongitude());
+        return time + " " + coordinate;
+        //return String.format("Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT", location.getLatitude(), location.getLongitude(), new Date(location.getTime()));
     }
 
-    private void SendData(final double latitude, final double longitude , final Date date) {
+    private void SendData(final double latitude, final double longitude , final Location location) {
         mServer = new LatTopServer();
         new Thread(new Runnable() {
             @Override
@@ -124,10 +127,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String lat = Double.toString(latitude);
                     String lon = Double.toString(longitude);
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-                    String time = dateFormat.format(date);
-                    //String message = lat + " " + lon + " " + time;
-                    String message = lat;
+                    //DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                    //String time = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS").format(location.getTime());
+                    //String time = dateFormat.format(date);
+                    String message = lat + " " + lon + " " + "end";
+                    //String message = lat;
                     //String message = time;
                     mServer.SendData(message.getBytes());
 
@@ -139,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
 //Закрытие соединения
             }
         }).start();
+    }
+
+    public void ServiceStart(View view){
+        Intent i=new Intent(this, GeolocationService.class);
+        startService(i);
     }
 
     //Преобразуем тип double в массив из 8 байт

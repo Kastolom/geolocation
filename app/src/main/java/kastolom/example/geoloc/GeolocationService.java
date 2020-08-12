@@ -45,29 +45,23 @@ public class GeolocationService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-            //showLocation(location);
             SendData(location.getLatitude(), location.getLongitude(), location);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            //checkEnabled();
+
         }
 
         @SuppressLint("MissingPermission")
         @Override
         public void onProviderEnabled(String provider) {
-            //checkEnabled();
-            //showLocation(locationManager.getLastKnownLocation(provider));
+
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            //if (provider.equals(LocationManager.GPS_PROVIDER)) {
-            //    tvStatusGPS.setText("Status: " + String.valueOf(status));
-            //} else if (provider.equals(LocationManager.NETWORK_PROVIDER)) {
-            //    tvStatusNet.setText("Status: " + String.valueOf(status));
-            //}
+
         }
     };
 
@@ -85,11 +79,7 @@ public class GeolocationService extends Service {
                 try {
                     String lat = Double.toString(latitude);
                     String lon = Double.toString(longitude);
-                    //DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-                    //String time = dateFormat.format(date);
                     String message = lat + " " + lon + " " + "end";
-                    //String message = lat;
-                    //String message = time;
                     mServer.SendData(message.getBytes());
 
                 } catch (Exception e) {

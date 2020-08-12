@@ -15,10 +15,6 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         String time = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
         String coordinate = String.format("Coordinates: lat = %1$.8f, lon = %2$.8f", location.getLatitude(), location.getLongitude());
         return time + " " + coordinate;
-        //return String.format("Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT", location.getLatitude(), location.getLongitude(), new Date(location.getTime()));
     }
 
     private void SendData(final double latitude, final double longitude , final Location location) {
@@ -127,12 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String lat = Double.toString(latitude);
                     String lon = Double.toString(longitude);
-                    //DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-                    //String time = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS").format(location.getTime());
-                    //String time = dateFormat.format(date);
                     String message = lat + " " + lon + " " + "end";
-                    //String message = lat;
-                    //String message = time;
                     mServer.SendData(message.getBytes());
 
                 } catch (Exception e) {
@@ -150,14 +140,6 @@ public class MainActivity extends AppCompatActivity {
         startService(i);
     }
 
-    //Преобразуем тип double в массив из 8 байт
-    private byte[] doubleToByteArray ( final double i ) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(bos);
-        dos.writeDouble(i);
-        dos.flush();
-        return bos.toByteArray();
-    }
     //Преобразуем тип double в массив из 8 байт
 
     private void checkEnabled() {

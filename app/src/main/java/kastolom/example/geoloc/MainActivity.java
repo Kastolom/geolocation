@@ -15,6 +15,7 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramSocket;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     TextView tvStatusNet;
     TextView tvLocationNet;
     Button send;
-    private LatTopServer mServer = null;
+
+    //private LatTopServer mServer = null;
+    private DatagramSocket mServer = null;
 
     private LocationManager locationManager;
     StringBuilder sbGPS = new StringBuilder();
@@ -109,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SendData(final double latitude, final double longitude , final Location location) {
-        mServer = new LatTopServer();
+        //mServer = new LatTopServer();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mServer.OpenConnection();
+                    //mServer.OpenConnection();
                 } catch (Exception e) {
                     Log.e(LatTopServer.LOG_TAG, e.getMessage());
                 }
@@ -123,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
                     String lat = Double.toString(latitude);
                     String lon = Double.toString(longitude);
                     String message = lat + " " + lon + " " + "end";
-                    mServer.SendData(message.getBytes());
+                    //mServer.SendData(message.getBytes());
 
                 } catch (Exception e) {
                     Log.e(LatTopServer.LOG_TAG, e.getMessage());
                 }
 //Отправка
-                mServer.closeConnection();
+                //mServer.closeConnection();
 //Закрытие соединения
             }
         }).start();

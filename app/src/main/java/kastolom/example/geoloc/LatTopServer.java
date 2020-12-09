@@ -4,11 +4,13 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 
 public class LatTopServer {
     public static final String LOG_TAG = "myServerAPP";
     private String mServername = "194.158.216.130";
-    private int mServerPort = 8005;
+    private int mServerPort = 8888;
     private Socket mSocket = null;
 
     public LatTopServer() {

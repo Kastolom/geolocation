@@ -15,7 +15,9 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -123,9 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 //Соединение
                 try {
+                    mServer = new DatagramSocket();
                     String lat = Double.toString(latitude);
                     String lon = Double.toString(longitude);
                     String message = lat + " " + lon + " " + "end";
+                    byte[] b = message.getBytes();
+                    DatagramPacket dp = new DatagramPacket(b , b.length , InetAddress.getByName("194.158.216.130") , 8888);
+                    mServer.send(dp);
                     //mServer.SendData(message.getBytes());
 
                 } catch (Exception e) {

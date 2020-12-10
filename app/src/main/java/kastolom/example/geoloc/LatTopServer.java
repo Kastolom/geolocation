@@ -1,13 +1,18 @@
 package kastolom.example.geoloc;
 
+import android.location.Location;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class LatTopServer {
+
+    private DatagramSocket mServer = null;
+
     public static final String LOG_TAG = "myServerAPP";
     private String mServername = "194.158.216.130";
     private int mServerPort = 8888;
@@ -16,49 +21,33 @@ public class LatTopServer {
     public LatTopServer() {
     }
 
-    public void OpenConnection() throws Exception, IOException {
-        //Перед открытием освобождаем ресурсы
-        closeConnection();
+    public void SendData(final double latitude, final double longitude) {
+        //mServer = new LatTopServer();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //mServer.OpenConnection();
+                } catch (Exception e) {
+                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
+                }
+//Соединение
+                try {
+                    mServer = new DatagramSocket(); //Изменения для UDP
+                    String lat = Double.toString(latitude);
+                    String lon = Double.toString(longitude);
+                    String message = lat + " " + lon + " " + "end";
+                    byte[] b = message.getBytes(); //Изменения для UDP
+                    DatagramPacket dp = new DatagramPacket(b , b.length , InetAddress.getByName(mServername) , mServerPort); //Изменения для UDP
+                    mServer.send(dp); //Изменения для UDP
 
-        try {
-            mSocket = new Socket(mServername, mServerPort);
-        } catch (IOException e) {
-            throw new Exception("Невозможно создать сокет: " + e.getMessage());
-        }
-
-    }
-
-    public void closeConnection() {
-
-        if(mSocket != null && !mSocket.isClosed()) {
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Невозможно закрыть соккет: " + e.getMessage());
-            } finally {
-                mSocket = null;
+                } catch (Exception e) {
+                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
+                }
+//Отправка
+                //mServer.closeConnection();
+//Закрытие соединения
             }
-        }
-        mSocket = null;
-    }
-
-    public void SendData(byte [] data) throws  Exception {
-        if (mSocket == null || mSocket.isClosed()) {
-            throw new Exception("Невозможно отправить данные. Сокет не создан или закрыт!");
-        }
-
-        try {
-            mSocket.getOutputStream().write(data);
-            mSocket.getOutputStream().flush();
-
-        } catch (IOException e) {
-            throw new Exception("Невозможно отправить данные" + e.getMessage() );
-        }
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        closeConnection();
+        }).start();
     }
 }

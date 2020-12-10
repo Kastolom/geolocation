@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class GeolocationService extends Service {
 
@@ -45,7 +45,8 @@ public class GeolocationService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-            SendData(location.getLatitude(), location.getLongitude(), location);
+            mServer = new LatTopServer();
+            mServer.SendData(location.getLatitude(), location.getLongitude());
         }
 
         @Override
@@ -64,31 +65,4 @@ public class GeolocationService extends Service {
 
         }
     };
-
-    private void SendData(final double latitude, final double longitude , final Location location) {
-        mServer = new LatTopServer();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mServer.OpenConnection();
-                } catch (Exception e) {
-                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
-                }
-//Соединение
-                try {
-                    String lat = Double.toString(latitude);
-                    String lon = Double.toString(longitude);
-                    String message = lat + " " + lon + " " + "end";
-                    mServer.SendData(message.getBytes());
-
-                } catch (Exception e) {
-                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
-                }
-//Отправка
-                mServer.closeConnection();
-//Закрытие соединения
-            }
-        }).start();
-    }
 }

@@ -12,9 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -29,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvLocationNet;
     Button send;
 
-    //private LatTopServer mServer = null;
-    private DatagramSocket mServer = null;
+    private LatTopServer mServer = null; //Изменения для UDP
 
     private LocationManager locationManager;
     StringBuilder sbGPS = new StringBuilder();
@@ -70,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             showLocation(location);
-            SendData(location.getLatitude(), location.getLongitude(), location);
+            mServer = new LatTopServer();
+            mServer.SendData(location.getLatitude(), location.getLongitude());
         }
 
         @Override
@@ -111,37 +108,6 @@ public class MainActivity extends AppCompatActivity {
         String time = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
         String coordinate = String.format("Coordinates: lat = %1$.8f, lon = %2$.8f", location.getLatitude(), location.getLongitude());
         return time + " " + coordinate;
-    }
-
-    private void SendData(final double latitude, final double longitude , final Location location) {
-        //mServer = new LatTopServer();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //mServer.OpenConnection();
-                } catch (Exception e) {
-                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
-                }
-//Соединение
-                try {
-                    mServer = new DatagramSocket();
-                    String lat = Double.toString(latitude);
-                    String lon = Double.toString(longitude);
-                    String message = lat + " " + lon + " " + "end";
-                    byte[] b = message.getBytes();
-                    DatagramPacket dp = new DatagramPacket(b , b.length , InetAddress.getByName("194.158.216.130") , 8888);
-                    mServer.send(dp);
-                    //mServer.SendData(message.getBytes());
-
-                } catch (Exception e) {
-                    Log.e(LatTopServer.LOG_TAG, e.getMessage());
-                }
-//Отправка
-                //mServer.closeConnection();
-//Закрытие соединения
-            }
-        }).start();
     }
 
     public void ServiceStart(View view){

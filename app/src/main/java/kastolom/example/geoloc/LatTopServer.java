@@ -18,11 +18,13 @@ public class LatTopServer {
     private int mServerPort = 8888;
     //private Socket mSocket = null;
     private String nameUser = "Пользователь";
+    private String provider;
 
-    public LatTopServer(String ip, int port, String name) {
+    public LatTopServer(String ip, int port, String name, String _provider) {
         mServername = ip;
         mServerPort = port;
         nameUser = name;
+        provider =_provider;
     }
 
     public void SendData(final Location location) {
@@ -40,7 +42,7 @@ public class LatTopServer {
                     mServer = new DatagramSocket(); //Изменения для UDP
                     String lat = Double.toString(location.getLatitude());
                     String lon = Double.toString(location.getLongitude());
-                    String message = nameUser + " " + lat + " " + lon;
+                    String message = nameUser + " " + lat + " " + lon + " " + provider;
                     byte[] b = message.getBytes(); //Изменения для UDP
                     DatagramPacket dp = new DatagramPacket(b , b.length , InetAddress.getByName(mServername) , mServerPort); //Изменения для UDP
                     mServer.send(dp); //Изменения для UDP

@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationChanged(Location location) {
             showLocation(location);
             //SaveSetting(tvIPadress.getText().toString(), Integer.parseInt(tvPort.getText().toString()), tvUser.getText().toString());
-            mServer = new LatTopServer(tvIPadress.getText().toString(), Integer.parseInt(tvPort.getText().toString()), tvUser.getText().toString());
+            String prvdr = location.getProvider();
+            mServer = new LatTopServer(tvIPadress.getText().toString(), Integer.parseInt(tvPort.getText().toString()), tvUser.getText().toString(), prvdr);
             mServer.SendData(location);
         }
 

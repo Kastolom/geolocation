@@ -50,7 +50,7 @@ public class GeolocationService extends Service {
         @Override
         public void onLocationChanged(Location location) {
 
-            mServer = new LatTopServer(myPreferences.getString("IP", "194.158.216.130"), myPreferences.getInt("PORT", 8888), myPreferences.getString("NAME", "Пользователь"));
+            mServer = new LatTopServer(myPreferences.getString("IP", "194.158.216.130"), myPreferences.getInt("PORT", 8888), myPreferences.getString("NAME", "Пользователь"), location.getProvider());
             mServer.SendData(location);
         }
 

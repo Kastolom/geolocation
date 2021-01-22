@@ -40,7 +40,7 @@ public class LatTopServer {
                     mServer = new DatagramSocket(); //Изменения для UDP
                     String lat = Double.toString(location.getLatitude());
                     String lon = Double.toString(location.getLongitude());
-                    String message = nameUser + " " + lat + " " + lon + " " + "end";
+                    String message = nameUser + " " + lat + " " + lon;
                     byte[] b = message.getBytes(); //Изменения для UDP
                     DatagramPacket dp = new DatagramPacket(b , b.length , InetAddress.getByName(mServername) , mServerPort); //Изменения для UDP
                     mServer.send(dp); //Изменения для UDP

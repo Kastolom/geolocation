@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void SaveSetting(View view){
         //myPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        myPreferences = getPreferences(MODE_PRIVATE);
+        myPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor myEditor = myPreferences.edit();
         myEditor.putString("IP", tvIPadress.getText().toString());
         myEditor.putInt("PORT", Integer.parseInt(tvPort.getText().toString()));
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void  LoadSetting(){
-        myPreferences = getPreferences(MODE_PRIVATE);
+        myPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String ip = myPreferences.getString("IP", "194.158.216.130");
         tvIPadress.setText(ip);
         int port = myPreferences.getInt("PORT", 8888);
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CheckStartService(View view){
-        myPreferences = getPreferences(MODE_PRIVATE);
+        myPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor myEditor = myPreferences.edit();
         if(cbStartService.isChecked()){
             myEditor.putBoolean("CBSERVICE", true);

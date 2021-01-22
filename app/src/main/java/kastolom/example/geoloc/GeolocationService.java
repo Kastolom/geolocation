@@ -18,10 +18,12 @@ import java.net.InetAddress;
 
 public class GeolocationService extends Service {
 
+    SharedPreferences myPreferences;
+
     private LocationManager locationManager;
     private LatTopServer mServer = null;
-    SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(GeolocationService.this);
-    SharedPreferences.Editor myEditor = myPreferences.edit();
+    //SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(GeolocationService.this);
+    //SharedPreferences.Editor myEditor = myPreferences.edit();
 
     public GeolocationService() {
     }
@@ -49,7 +51,7 @@ public class GeolocationService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-
+            myPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             mServer = new LatTopServer(myPreferences.getString("IP", "194.158.216.130"), myPreferences.getInt("PORT", 8888), myPreferences.getString("NAME", "Пользователь"), location.getProvider());
             mServer.SendData(location);
         }

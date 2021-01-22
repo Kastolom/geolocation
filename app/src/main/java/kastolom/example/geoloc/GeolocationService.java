@@ -3,11 +3,13 @@ package kastolom.example.geoloc;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.net.DatagramPacket;
@@ -18,6 +20,8 @@ public class GeolocationService extends Service {
 
     private LocationManager locationManager;
     private LatTopServer mServer = null;
+    SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(GeolocationService.this);
+    SharedPreferences.Editor myEditor = myPreferences.edit();
 
     public GeolocationService() {
     }
@@ -45,8 +49,9 @@ public class GeolocationService extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
-            mServer = new LatTopServer();
-            mServer.SendData(location.getLatitude(), location.getLongitude());
+
+            mServer = new LatTopServer(myPreferences.getString("IP", "194.158.216.130"), myPreferences.getInt("PORT", 8888), myPreferences.getString("NAME", "Пользователь"));
+            mServer.SendData(location);
         }
 
         @Override

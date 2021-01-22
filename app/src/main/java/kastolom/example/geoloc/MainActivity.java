@@ -3,18 +3,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.view.View;
-
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +23,13 @@ public class MainActivity extends AppCompatActivity {
     TextView tvEnabledNet;
     TextView tvStatusNet;
     TextView tvLocationNet;
+    TextView tvPort;
+    TextView tvUser;
+    TextView tvIPadress;
+    CheckBox cbStartService;
     Button send;
+
+    SharedPreferences myPreferences;
 
     private LatTopServer mServer = null; //Изменения для UDP
 
@@ -42,9 +47,14 @@ public class MainActivity extends AppCompatActivity {
         tvEnabledNet = (TextView) findViewById(R.id.tvEnabledNet);
         tvStatusNet = (TextView) findViewById(R.id.tvStatusNet);
         tvLocationNet = (TextView) findViewById(R.id.tvLocationNet);
+        tvPort = (TextView) findViewById(R.id.tvPort);
+        tvUser = (TextView) findViewById(R.id.tvUser);
+        tvIPadress = (TextView) findViewById(R.id.tvIPAdress);
+        cbStartService = (CheckBox) findViewById(R.id.checkBox);
         send = (Button) findViewById(R.id.send);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        LoadSetting();
     }
 
     @SuppressLint("MissingPermission")
@@ -66,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             showLocation(location);
-            mServer = new LatTopServer();
-            mServer.SendData(location.getLatitude(), location.getLongitude());
+            //SaveSetting(tvIPadress.getText().toString(), Integer.parseInt(tvPort.getText().toString()), tvUser.getText().toString());
+            mServer = new LatTopServer(tvIPadress.getText().toString(), Integer.parseInt(tvPort.getText().toString()), tvUser.getText().toString());
+            mServer.SendData(location);
         }
 
         @Override
@@ -120,6 +131,40 @@ public class MainActivity extends AppCompatActivity {
     private void checkEnabled() {
         tvEnabledGPS.setText("Enabled: " + locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER));
         tvEnabledNet.setText("Enabled: " + locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+    }
+
+    public void SaveSetting(View view){
+        //myPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        myPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor myEditor = myPreferences.edit();
+        myEditor.putString("IP", tvIPadress.getText().toString());
+        myEditor.putInt("PORT", Integer.parseInt(tvPort.getText().toString()));
+        myEditor.putString("NAME", tvUser.getText().toString());
+        myEditor.commit();
+        Toast.makeText(this, "Данные сохранены!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void  LoadSetting(){
+        myPreferences = getPreferences(MODE_PRIVATE);
+        String ip = myPreferences.getString("IP", "194.158.216.130");
+        tvIPadress.setText(ip);
+        int port = myPreferences.getInt("PORT", 8888);
+        tvPort.setText(Integer.toString(port));
+        String name = myPreferences.getString("NAME", "Пользователь");
+        tvUser.setText(name);
+        Toast.makeText(this, "Данные загружены!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void CheckStartService(View view){
+        myPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor myEditor = myPreferences.edit();
+        if(cbStartService.isChecked()){
+            myEditor.putBoolean("CBSERVICE", true);
+        }
+        else {
+            myEditor.putBoolean("CBSERVICE", false);
+        }
+        myEditor.commit();
     }
 
     public void onClickLocationSettings(View view) {

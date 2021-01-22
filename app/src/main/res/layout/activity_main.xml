@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/tvLocationGPS"
         android:layout_width="312dp"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Пусто..."
@@ -46,7 +46,7 @@
     <TextView
         android:id="@+id/tvLocationNet"
         android:layout_width="312dp"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Пусто..."
@@ -165,18 +165,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
-    <EditText
-        android:id="@+id/editText"
+    <Button
+        android:id="@+id/send3"
+        android:layout_width="58dp"
+        android:layout_height="133dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="SaveSetting"
+        android:text="П\nР\nИ\nН\nЯ\nТ\nЬ"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintStart_toEndOf="@+id/tvIPAdress"
+        app:layout_constraintTop_toBottomOf="@+id/tvLocationNet" />
+
+    <Button
+        android:id="@+id/setting"
         android:layout_width="312dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClickLocationSettings"
+        android:text="Настройки геолокации"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/send" />
+
+    <EditText
+        android:id="@+id/tvIPAdress"
+        android:layout_width="250dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Введите порт: 8005 по умолчаниею"
+        android:hint="Адрес сервера: 194.158.216.130 по умолчанию"
         android:inputType="textPersonName"
-        android:text="8005"
+        android:text="194.158.216.130"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLocationNet" />
+
+    <EditText
+        android:id="@+id/tvPort"
+        android:layout_width="250dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Порт: 8888 по умолчанию"
+        android:inputType="textPersonName"
+        android:text="8888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIPAdress" />
+
+    <EditText
+        android:id="@+id/tvUser"
+        android:layout_width="250dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Введите имя пользователя"
+        android:inputType="textPersonName"
+        android:text="Пользователь"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPort" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -184,8 +233,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:onClick="CheckStartService"
         android:text="Всегда запускать как сервис"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUser" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
